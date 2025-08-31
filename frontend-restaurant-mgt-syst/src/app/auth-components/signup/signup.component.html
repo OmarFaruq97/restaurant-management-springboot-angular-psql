@@ -1,0 +1,57 @@
+<form nz-form [formGroup]="signupForm" (ngSubmit)="register()">
+  <nz-form-item>
+    <nz-form-label [nzRequired]="true">Username</nz-form-label>
+    <nz-form-control [nzErrorTip]="usernameErrorTpl">
+      <input nz-input formControlName="username" placeholder="Enter username" />
+    </nz-form-control>
+  </nz-form-item>
+  <ng-template #usernameErrorTpl>
+    <span *ngIf="signupForm.get('username')?.touched && signupForm.get('username')?.invalid">
+      Username is required (min 3 characters)
+    </span>
+  </ng-template>
+
+  <nz-form-item>
+    <nz-form-label [nzRequired]="true">Email</nz-form-label>
+    <nz-form-control [nzErrorTip]="emailErrorTpl">
+      <input nz-input type="email" formControlName="email" placeholder="Enter email" />
+    </nz-form-control>
+  </nz-form-item>
+  <ng-template #emailErrorTpl>
+    <span *ngIf="signupForm.get('email')?.touched && signupForm.get('email')?.invalid">
+      Valid email is required
+    </span>
+  </ng-template>
+
+  <nz-form-item>
+    <nz-form-label [nzRequired]="true">Password</nz-form-label>
+    <nz-form-control [nzErrorTip]="passwordErrorTpl">
+      <input nz-input type="password" formControlName="password" placeholder="Enter password" />
+    </nz-form-control>
+  </nz-form-item>
+  <ng-template #passwordErrorTpl>
+    <span *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.invalid">
+      Password is required (min 6 characters)
+    </span>
+  </ng-template>
+
+  <nz-form-item>
+    <nz-form-label [nzRequired]="true">Confirm Password</nz-form-label>
+    <nz-form-control [nzErrorTip]="confirmErrorTpl">
+      <input nz-input type="password" formControlName="confirmPassword" placeholder="Confirm password" />
+    </nz-form-control>
+  </nz-form-item>
+  <ng-template #confirmErrorTpl>
+    <span *ngIf="signupForm.hasError('passwordMismatch') && signupForm.get('confirmPassword')?.touched">
+      Passwords do not match
+    </span>
+  </ng-template>
+
+  <nz-form-item>
+    <nz-form-control>
+      <button nz-button nzType="primary" [disabled]="signupForm.invalid || loading">
+        {{ loading ? 'Submitting...' : 'Register' }}
+      </button>
+    </nz-form-control>
+  </nz-form-item>
+</form>
