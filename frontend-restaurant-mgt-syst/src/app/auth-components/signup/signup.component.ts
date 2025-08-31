@@ -32,7 +32,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 })
 export class SignupComponent implements OnInit {
   signupForm!: FormGroup<{
-    username: FormControl<string>;
+    name: FormControl<string>;
     email: FormControl<string>;
     password: FormControl<string>;
     confirmPassword: FormControl<string>;
@@ -45,7 +45,7 @@ export class SignupComponent implements OnInit {
   ngOnInit(): void {
     this.signupForm = this.fb.group(
       {
-        username: this.fb.control('', {
+        name: this.fb.control('', {
           validators: [Validators.required, Validators.minLength(3)],
           nonNullable: true,
         }),

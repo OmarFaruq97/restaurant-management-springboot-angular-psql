@@ -2,8 +2,9 @@
   <nz-form-item>
     <nz-form-label [nzRequired]="true">Username</nz-form-label>
     <nz-form-control [nzErrorTip]="usernameErrorTpl">
-      <input nz-input formControlName="username" placeholder="Enter username" />
+      <input nz-input formControlName="name" placeholder="Enter username" />
     </nz-form-control>
+    
   </nz-form-item>
   <ng-template #usernameErrorTpl>
     <span *ngIf="signupForm.get('username')?.touched && signupForm.get('username')?.invalid">
@@ -31,7 +32,7 @@
   </nz-form-item>
   <ng-template #passwordErrorTpl>
     <span *ngIf="signupForm.get('password')?.touched && signupForm.get('password')?.invalid">
-      Password is required (min 6 characters)
+      Password is required (min 5 characters)
     </span>
   </ng-template>
 
