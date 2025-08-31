@@ -1,6 +1,6 @@
 package com.org.restaurant_management.dtos;
 
-import com.org.restaurant_management.enums.UserRole;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,13 +10,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDto {
-    private Long id;
+
+public class SignupRequest {
     private String name;
     private String email;
     private String password;
-
-    private UserRole userRole;
-
-
 }
