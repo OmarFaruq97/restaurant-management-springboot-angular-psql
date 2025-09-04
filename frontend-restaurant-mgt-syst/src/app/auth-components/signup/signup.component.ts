@@ -15,6 +15,7 @@ import { CommonModule } from '@angular/common';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-signup',
@@ -40,7 +41,11 @@ export class SignupComponent implements OnInit {
 
   loading = false;
 
-  constructor(private service: AuthService, private fb: FormBuilder) {}
+  constructor(
+    private service: AuthService,
+    private fb: FormBuilder,
+    private notification: NzNotificationService
+  ) {}
 
   ngOnInit(): void {
     this.signupForm = this.fb.group(
@@ -84,6 +89,17 @@ export class SignupComponent implements OnInit {
     this.service.signup(this.signupForm.getRawValue()).subscribe({
       next: (res) => {
         console.log(res);
+        if (res.id != null) {
+          this.notification.success(
+            'SUCCESS',
+            'You are registerd successfully',
+            { nzDuration: 5000 }
+          );
+        } else {
+          this.notification.success('ERROR', 'Something wen wrong', {
+            nzDuration: 5000,
+          });
+        }
       },
       error: (err) => {
         console.error(err);
