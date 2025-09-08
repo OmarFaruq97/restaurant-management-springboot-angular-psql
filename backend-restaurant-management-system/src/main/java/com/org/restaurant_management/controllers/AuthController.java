@@ -5,10 +5,18 @@ import com.org.restaurant_management.dtos.AuthenticationResponse;
 import com.org.restaurant_management.dtos.SignupRequest;
 import com.org.restaurant_management.dtos.UserDto;
 import com.org.restaurant_management.services.auth.AuthService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @CrossOrigin(origins = "http://localhost:4200")
 
@@ -17,9 +25,11 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final AuthenticationManager authenticationManager;
 
-    public AuthController(AuthService authService) {
+    public AuthController(AuthService authService, AuthenticationManager authenticationManager) {
         this.authService = authService;
+        this.authenticationManager = authenticationManager;
     }
 
     @PostMapping("/signup")
@@ -37,8 +47,17 @@ public class AuthController {
         return new ResponseEntity<>(createUserDto, HttpStatus.OK);
         */
     }
-    public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest){
 
-        return null;
+    @PostMapping("/login")
+    public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) throws IOException {
+        try {
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    (authenticationRequest.getEmail(), authenticationRequest.getPassword())));
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Incorrect username or password");
+        }catch (DisabledException disabledException){
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, "User not active");
+            return  null;
+        }
     }
 }
