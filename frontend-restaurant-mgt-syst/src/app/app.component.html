@@ -1,17 +1,19 @@
 <div>
-    <nz-header class="main-header">
-        <div class="auth-container">
-            <button nz-button nzType="primary" class="auth-btn" routerLink="/login" routerLinkActive="active-btn">
+    <nz-header class="main-header" nz-row="flex">
+        <div>
+            <a routerLink="/login">Restaurant Management</a>
+        </div>
+        <div class="nav-links">
+            <a nz-button nzType="link" routerLink="/login" routerLinkActive="active">
                 Login
-            </button>
+            </a>
 
-            <button nz-button nzType="default" class="auth-btn" routerLink="/signup" routerLinkActive="active-btn">
+            <a nz-button nzType="default" routerLink="/signup" routerLinkActive="active">
                 Sign Up
-            </button>
+            </a>
         </div>
     </nz-header>
 </div>
-
 
 
 <router-outlet></router-outlet>

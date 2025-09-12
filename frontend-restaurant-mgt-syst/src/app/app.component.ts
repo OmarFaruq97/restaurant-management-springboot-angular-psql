@@ -1,19 +1,23 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
 
-// NG-ZORRO imports
+// NG-ZORRO modules
 import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NzFormModule } from 'ng-zorro-antd/form';
 
 @Component({
   selector: 'app-root',
-  standalone: true, // required for Angular 19
+  standalone: true,
   imports: [
-    RouterOutlet, // for routing
-    NzLayoutModule, // for nz-layout, nz-header, nz-footer, etc.
-    NzButtonModule, // for nz-button
-    BrowserAnimationsModule, // required by NG-ZORRO components
+    RouterOutlet,
+    RouterLink,
+    CommonModule,
+    
+    NzLayoutModule,
+    NzButtonModule,
+    NzFormModule,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
