@@ -6,6 +6,7 @@ import com.org.restaurant_management.dtos.SignupRequest;
 import com.org.restaurant_management.dtos.UserDto;
 import com.org.restaurant_management.services.auth.AuthService;
 import com.org.restaurant_management.services.auth.jwt.UserDetailsServiceImplement;
+import com.org.restaurant_management.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,13 +27,15 @@ public class AuthController {
 
     private final AuthService authService;
     private final AuthenticationManager authenticationManager;
-
     private final UserDetailsServiceImplement userDetailsService;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(AuthService authService, AuthenticationManager authenticationManager, UserDetailsServiceImplement userDetailsServiceImplement, UserDetailsServiceImplement userDetailsService) {
+
+    public AuthController(AuthService authService, AuthenticationManager authenticationManager, UserDetailsServiceImplement userDetailsServiceImplement, UserDetailsServiceImplement userDetailsService, JwtUtil jwtUtil) {
         this.authService = authService;
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/signup")
@@ -52,7 +55,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public AuthenticationResponse createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest, HttpServletResponse response) throws IOException {
+    public AuthenticationResponse createAuthenticationToken(
+            @RequestBody AuthenticationRequest authenticationRequest,
+            HttpServletResponse response)
+            throws IOException {
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
@@ -66,7 +72,8 @@ public class AuthController {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "User not active");
             return null;
         }
-        final UserDetails userDetails =  userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
-        return null;
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
+        final String jwt = jwtUtil.generateToken(userDetails.getUsername());
+        return new AuthenticationResponse(jwt);
     }
 }
