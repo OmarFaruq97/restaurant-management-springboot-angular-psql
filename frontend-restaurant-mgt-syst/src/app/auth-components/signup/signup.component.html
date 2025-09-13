@@ -4,10 +4,9 @@
         <nz-form-control [nzErrorTip]="usernameErrorTpl">
             <input nz-input formControlName="name" placeholder="Enter username" />
         </nz-form-control>
-
     </nz-form-item>
     <ng-template #usernameErrorTpl>
-        <span *ngIf="signupForm.get('username')?.touched && signupForm.get('username')?.invalid">
+        <span *ngIf="signupForm.get('name')?.touched && signupForm.get('name')?.invalid">
             Username is required (min 3 characters)
         </span>
     </ng-template>

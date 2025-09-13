@@ -1,32 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { AuthService } from '../../auth-services/auth-service/auth.service';
 import {
   FormBuilder,
   FormGroup,
   FormControl,
-  FormsModule,
-  ReactiveFormsModule,
   Validators,
   ValidatorFn,
   AbstractControl,
   ValidationErrors,
+  ReactiveFormsModule,
 } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzButtonModule } from 'ng-zorro-antd/button';
-import { NzNotificationService } from 'ng-zorro-antd/notification';
+import { NzNotificationModule, NzNotificationService } from 'ng-zorro-antd/notification';
 
 @Component({
   selector: 'app-signup',
-
+  standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule,
-    FormsModule,
     NzFormModule,
     NzInputModule,
     NzButtonModule,
+    NzNotificationModule,
+    ReactiveFormsModule,
   ],
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css'],
@@ -44,7 +43,9 @@ export class SignupComponent implements OnInit {
   constructor(
     private service: AuthService,
     private fb: FormBuilder,
-    private notification: NzNotificationService
+    private notification: NzNotificationService,
+    private cdr: ChangeDetectorRef,
+    private zone: NgZone
   ) {}
 
   ngOnInit(): void {
@@ -71,7 +72,7 @@ export class SignupComponent implements OnInit {
     );
   }
 
-  // custom validator
+  // Custom validator to match password and confirmPassword
   passwordMatchValidator: ValidatorFn = (
     control: AbstractControl
   ): ValidationErrors | null => {
@@ -83,27 +84,59 @@ export class SignupComponent implements OnInit {
   register(): void {
     if (this.signupForm.invalid) {
       this.signupForm.markAllAsTouched();
+      console.log('Form is invalid:', this.signupForm.errors);
       return;
     }
+
     this.loading = true;
-    this.service.signup(this.signupForm.getRawValue()).subscribe({
+    console.log('Submitting form with values:', this.signupForm.value);
+
+    this.service.signup(this.signupForm.value).subscribe({
       next: (res) => {
-        console.log(res);
-        if (res.id != null) {
+        this.loading = false;
+        console.log('API response:', res);
+
+        if (res.id) {
           this.notification.success(
             'SUCCESS',
-            'You are registerd successfully',
+            'You are registered successfully',
             { nzDuration: 5000 }
           );
+
+          // Run form reset in NgZone to ensure UI updates
+          this.zone.run(() => {
+            // Reset the form completely
+            this.signupForm.reset();
+            // Manually clear form controls to ensure UI update
+            this.signupForm.patchValue({
+              name: '',
+              email: '',
+              password: '',
+              confirmPassword: '',
+            });
+            // Mark form as pristine and untouched
+            this.signupForm.markAsPristine();
+            this.signupForm.markAsUntouched();
+            // Trigger change detection
+            this.cdr.detectChanges();
+            // Delay UI update to ensure NG-Zorro sync
+            setTimeout(() => {
+              this.cdr.detectChanges();
+              console.log('Form reset, current values:', this.signupForm.value);
+            }, 0);
+          });
         } else {
-          this.notification.success('ERROR', 'Something wen wrong', {
+          this.notification.error('ERROR', 'Something went wrong', {
             nzDuration: 5000,
           });
         }
       },
       error: (err) => {
-        console.error(err);
         this.loading = false;
+        console.error('API error:', err);
+        this.notification.error('ERROR', err.error.message || 'Server error', {
+          nzDuration: 5000,
+        });
       },
     });
   }
