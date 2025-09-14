@@ -1,11 +1,44 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../auth-services/auth-service/auth.service';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
+import { NzFormModule } from 'ng-zorro-antd/form';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { NzButtonModule } from 'ng-zorro-antd/button';
+import { NzInputModule } from 'ng-zorro-antd/input';
 
 @Component({
   selector: 'app-login',
-  imports: [],
+  imports: [
+    CommonModule,
+    NzFormModule,
+    NzInputModule,
+    NzButtonModule,
+    ReactiveFormsModule,
+    RouterModule,
+  ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css'],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
+  loginForm!: FormGroup;
+  isSpinning: boolean = false;
 
+  constructor(private service: AuthService, private fb: FormBuilder) {}
+
+  ngOnInit(): void {
+    this.loginForm = this.fb.group({
+      email: [null, [Validators.required, Validators.email]],
+      password: [null, [Validators.required, Validators.minLength(5)]],
+    });
+  }
+
+  submitForm(): void {
+    console.log(this.loginForm.value);
+  }
 }
