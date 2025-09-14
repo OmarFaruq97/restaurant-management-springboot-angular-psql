@@ -4,6 +4,8 @@ import com.org.restaurant_management.dtos.AuthenticationRequest;
 import com.org.restaurant_management.dtos.AuthenticationResponse;
 import com.org.restaurant_management.dtos.SignupRequest;
 import com.org.restaurant_management.dtos.UserDto;
+import com.org.restaurant_management.entities.User;
+import com.org.restaurant_management.repositories.UserRepository;
 import com.org.restaurant_management.services.auth.AuthService;
 import com.org.restaurant_management.services.auth.jwt.UserDetailsServiceImplement;
 import com.org.restaurant_management.util.JwtUtil;
@@ -18,6 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:4200")
 
@@ -29,13 +32,15 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserDetailsServiceImplement userDetailsService;
     private final JwtUtil jwtUtil;
+    private final UserRepository userRepository;
 
 
-    public AuthController(AuthService authService, AuthenticationManager authenticationManager, UserDetailsServiceImplement userDetailsServiceImplement, UserDetailsServiceImplement userDetailsService, JwtUtil jwtUtil) {
+    public AuthController(AuthService authService, AuthenticationManager authenticationManager, UserDetailsServiceImplement userDetailsServiceImplement, UserDetailsServiceImplement userDetailsService, JwtUtil jwtUtil, UserRepository userRepository) {
         this.authService = authService;
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/signup")
@@ -74,6 +79,13 @@ public class AuthController {
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getEmail());
         final String jwt = jwtUtil.generateToken(userDetails.getUsername());
-        return new AuthenticationResponse(jwt);
+        Optional<User> optionalUser = userRepository.findFirstByEmail(userDetails.getUsername());
+        AuthenticationResponse authenticationResponse = new AuthenticationResponse();
+        if (optionalUser.isPresent()) {
+            authenticationResponse.setJwt(jwt);
+            authenticationResponse.setUserRole(optionalUser.get().getUserRole());
+            authenticationResponse.setUserId(authenticationResponse.getUserId());
+        }
+        return authenticationResponse;
     }
 }
