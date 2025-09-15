@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
+import { StorageService } from '../../auth-services/storage-service/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -41,6 +42,19 @@ export class LoginComponent implements OnInit {
   submitForm(): void {
     this.service.login(this.loginForm.value).subscribe((res) => {
       console.log(res);
+      if (res.userId != null) {
+        const user = {
+          id: res.userId,
+          role: res.userRole,
+        };
+        console.log(user);
+        StorageService.saveToken(res.jwt);
+        StorageService.saveUser(user);
+      }
+      else{
+        console.error("Wronge credetials from error")
+        console.log("Wronge credetials from log")
+      }
     });
   }
 }
