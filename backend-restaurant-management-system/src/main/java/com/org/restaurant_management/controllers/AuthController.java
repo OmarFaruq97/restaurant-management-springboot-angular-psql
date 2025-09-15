@@ -34,7 +34,6 @@ public class AuthController {
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
 
-
     public AuthController(AuthService authService, AuthenticationManager authenticationManager, UserDetailsServiceImplement userDetailsServiceImplement, UserDetailsServiceImplement userDetailsService, JwtUtil jwtUtil, UserRepository userRepository) {
         this.authService = authService;
         this.authenticationManager = authenticationManager;
@@ -84,7 +83,9 @@ public class AuthController {
         if (optionalUser.isPresent()) {
             authenticationResponse.setJwt(jwt);
             authenticationResponse.setUserRole(optionalUser.get().getUserRole());
-            authenticationResponse.setUserId(authenticationResponse.getUserId());
+            authenticationResponse.setUserId(optionalUser.get().getId());
+        } else {
+            throw new RuntimeException("User not found");
         }
         return authenticationResponse;
     }
