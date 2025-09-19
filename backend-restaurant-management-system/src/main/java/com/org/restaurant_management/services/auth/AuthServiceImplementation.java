@@ -5,6 +5,7 @@ import com.org.restaurant_management.dtos.UserDto;
 import com.org.restaurant_management.entities.User;
 import com.org.restaurant_management.enums.UserRole;
 import com.org.restaurant_management.repositories.UserRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,10 +17,21 @@ public class AuthServiceImplementation implements AuthService {
 
 
     @Autowired
-
     public AuthServiceImplementation(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
 
+    @PostConstruct
+    public void createAdminAccount(){
+        User adminAccount = userRepository.findByUserRole(UserRole.ADMIN);
+        if (adminAccount == null){
+            User user = new User();
+            user.setName("Rahaf Bim Omar");
+            user.setEmail("rahaf@gmail.com");
+            user.setPassword(new BCryptPasswordEncoder().encode("12345"));
+            user.setUserRole(UserRole.ADMIN);
+            userRepository.save(user);
+        }
     }
 
     @Override
