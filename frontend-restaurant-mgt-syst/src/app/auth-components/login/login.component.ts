@@ -50,10 +50,9 @@ export class LoginComponent implements OnInit {
         console.log(user);
         StorageService.saveToken(res.jwt);
         StorageService.saveUser(user);
-      }
-      else{
-        console.error("Wronge credetials from error")
-        console.log("Wronge credetials from log")
+      } else {
+        console.error('Wronge credetials from error');
+        console.log('Wronge credetials from log');
       }
     });
   }
