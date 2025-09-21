@@ -5,8 +5,7 @@ import { LoginComponent } from './auth-components/login/login.component';
 export const routes: Routes = [
   { path: 'signup', component: SignupComponent },
   { path: 'login', component: LoginComponent },
-  { path: '', redirectTo: 'signup', pathMatch: 'full' },
-  { path: '**', redirectTo: 'signup' },
+
   {
     path: 'admin',
     loadChildren: () =>
@@ -15,8 +14,14 @@ export const routes: Routes = [
   {
     path: 'customer',
     loadChildren: () =>
-      import('./modules/customer/customer.module').then((m) => m.CustomerModule),
+      import('./modules/customer/customer.module').then(
+        (m) => m.CustomerModule
+      ),
   },
+
+  { path: '', redirectTo: 'login', pathMatch: 'full' }, // better default
+  { path: '**', redirectTo: 'login' }, // fallback to login, not signup
 ];
+
 
 export const appRouting = provideRouter(routes);

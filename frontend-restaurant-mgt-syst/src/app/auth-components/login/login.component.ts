@@ -58,6 +58,8 @@ export class LoginComponent implements OnInit {
             role: res.userRole ?? res.role,
           };
 
+          console.log('Login response:', res);
+
           StorageService.saveToken(res.jwt ?? res.token);
           StorageService.saveUser(user);
 
@@ -75,28 +77,4 @@ export class LoginComponent implements OnInit {
       },
     });
   }
-
-  /*
-  submitForm(): void {
-    this.service.login(this.loginForm.value).subscribe((res) => {
-      console.log(res);
-      if (res.userId != null) {
-        const user = {
-          id: res.userId,
-          role: res.userRole,
-        };
-        console.log(user);
-        StorageService.saveToken(res.jwt);
-        StorageService.saveUser(user);
-        if (StorageService.isAdminLoggedIn()) {
-          this.router.navigateByUrl('admin/dashboard');
-        } else if (StorageService.isCustomerLoggedIn()) {
-          this.router.navigateByUrl('customer/dashboard');
-        }
-      } else {
-        console.error('Wronge credetials from error');
-        console.log('Wronge credetials from log');
-      }
-    });
-  }*/
 }
