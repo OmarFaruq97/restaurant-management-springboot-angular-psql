@@ -7,18 +7,19 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { StorageService } from './auth-services/storage-service/storage.service';
+import { AdminRoutingModule } from "./modules/admin/admin-routing.module";
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
-    RouterOutlet,
     RouterLink,
     CommonModule,
     NzLayoutModule,
     NzButtonModule,
     NzFormModule,
-  ],
+    AdminRoutingModule
+],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
@@ -38,4 +39,11 @@ export class AppComponent {
       }
     })
   }
+//   logout() {
+//   StorageService.clear(); // clear token & user
+//   this.isAdminLoggedIn = false;
+//   this.isCustomerLoggedIn = false;
+//   this.router.navigateByUrl('/login');
+// }
+
 }

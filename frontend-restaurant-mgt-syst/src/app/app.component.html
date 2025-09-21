@@ -1,4 +1,4 @@
-<div *ngIf = "!isAdminLoggedIn && !isCustomerLoggedIn">
+<div *ngIf="!isAdminLoggedIn && !isCustomerLoggedIn">
     <nz-header class="main-header" nz-row="flex">
         <div>
             <a routerLink="/login">Restaurant Management</a>
@@ -11,7 +11,7 @@
 </div>
 
 <!-- this is for admin -->
-<div *ngIf = "!isAdminLoggedIn">
+<div *ngIf="isAdminLoggedIn">
     <nz-header class="main-header" nz-row="flex">
         <div>
             <a routerLink="/admin/dashboard">Restaurant Management</a>
@@ -24,7 +24,7 @@
 </div>
 
 <!-- this is for customers -->
-<div *ngIf="!isCustomerLoggedIn">
+<div *ngIf="isCustomerLoggedIn">
     <nz-header class="main-header" nz-row="flex">
         <div>
             <a routerLink="/customer/dashboard">Restaurant Management</a>
