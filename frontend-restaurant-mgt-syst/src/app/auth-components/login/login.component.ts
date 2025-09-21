@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { CommonModule } from '@angular/common';
-import { Route, Router, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { StorageService } from '../../auth-services/storage-service/storage.service';
@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
     private service: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private massage: NzMessageService
+    private message: NzMessageService
   ) {}
 
   ngOnInit(): void {
@@ -44,16 +44,15 @@ export class LoginComponent implements OnInit {
       password: [null, [Validators.required, Validators.minLength(5)]],
     });
   }
+
   submitForm(): void {
     if (this.loginForm.invalid) {
-      console.error('Form invalid');
+      this.message.error('Please fill in all required fields correctly.');
       return;
     }
 
     this.service.login(this.loginForm.value).subscribe({
       next: (res) => {
-        console.log('API Response:', res);
-
         if (res && (res.userId || res.id)) {
           const user = {
             id: res.userId ?? res.id,
@@ -69,12 +68,11 @@ export class LoginComponent implements OnInit {
             this.router.navigateByUrl('/customer/dashboard');
           }
         } else {
-          this.massage.error('Invalid credentials! Please try again.');
+          this.message.error('Invalid credentials! Please try again.');
         }
       },
-      error: (err) => {
-        console.error('Login failed:', err);
-        this.massage.error('Wrong email or password !');
+      error: () => {
+        this.message.error('Wrong email or password!');
       },
     });
   }
