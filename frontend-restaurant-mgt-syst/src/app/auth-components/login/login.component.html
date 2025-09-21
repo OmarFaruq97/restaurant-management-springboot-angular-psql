@@ -1,37 +1,43 @@
-<form nz-form [formGroup]="loginForm" (ngSubmit)="submitForm()">
-    <nz-form-item>
-        <nz-form-label [nzRequired]="true">Email</nz-form-label>
-        <nz-form-control [nzErrorTip]="emailErrorTpl">
-            <input nz-input type="email" formControlName="email" placeholder="Enter email" />
-        </nz-form-control>
-    </nz-form-item>
-    <ng-template #emailErrorTpl>
-        <span *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
-            Valid email is required
-        </span>
-    </ng-template>
+<div class="form-center">
+    <div class="login-form-container">
 
-    <nz-form-item>
-        <nz-form-label [nzRequired]="true">Password</nz-form-label>
-        <nz-form-control [nzErrorTip]="passwordErrorTpl">
-            <input nz-input type="password" formControlName="password" placeholder="Enter password" />
-        </nz-form-control>
-    </nz-form-item>
-    <ng-template #passwordErrorTpl>
-        <span *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
-            Password is required
-        </span>
-    </ng-template>
+        <form nz-form [formGroup]="loginForm" (ngSubmit)="submitForm()">
+            <nz-form-item>
+                <nz-form-label [nzRequired]="true">Email</nz-form-label>
+                <nz-form-control [nzErrorTip]="emailErrorTpl">
+                    <input nz-input type="email" formControlName="email" placeholder="Enter email" />
+                </nz-form-control>
+            </nz-form-item>
+            <ng-template #emailErrorTpl>
+                <span *ngIf="loginForm.get('email')?.touched && loginForm.get('email')?.invalid">
+                    Valid email is required
+                </span>
+            </ng-template>
 
-    <nz-form-item>
-        <nz-form-control>
-            <button nz-button nzType="primary" [disabled]="loginForm.invalid || isSpinning">
-                {{ isSpinning ? 'Logging in...' : 'Login' }}
-            </button>
-        </nz-form-control>
-    </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzRequired]="true">Password</nz-form-label>
+                <nz-form-control [nzErrorTip]="passwordErrorTpl">
+                    <input nz-input type="password" formControlName="password" placeholder="Enter password" />
+                </nz-form-control>
+            </nz-form-item>
+            <ng-template #passwordErrorTpl>
+                <span *ngIf="loginForm.get('password')?.touched && loginForm.get('password')?.invalid">
+                    Password is required
+                </span>
+            </ng-template>
 
-    <div class="register-link">
-        <p>Don't have an account? <a routerLink="/signup">Register</a></p>
+            <nz-form-item>
+                <nz-form-control>
+                    <button nz-button nzType="primary" [disabled]="loginForm.invalid || isSpinning">
+                        {{ isSpinning ? 'Logging in...' : 'Login' }}
+                    </button>
+                </nz-form-control>
+            </nz-form-item>
+
+            <div class="register-link">
+                <p>Don't have an account? <a routerLink="/signup">Register</a></p>
+            </div>
+        </form>
+
     </div>
-</form>
+</div>
