@@ -12,6 +12,7 @@ import { Route, Router, RouterModule } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { StorageService } from '../../auth-services/storage-service/storage.service';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-login',
@@ -33,7 +34,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private service: AuthService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private massage: NzMessageService
   ) {}
 
   ngOnInit(): void {
@@ -58,22 +60,21 @@ export class LoginComponent implements OnInit {
             role: res.userRole ?? res.role,
           };
 
-          console.log('Login response:', res);
-
           StorageService.saveToken(res.jwt ?? res.token);
           StorageService.saveUser(user);
 
           if (StorageService.isAdminLoggedIn()) {
-            this.router.navigate(['/admin/dashboard']);
+            this.router.navigateByUrl('/admin/dashboard');
           } else if (StorageService.isCustomerLoggedIn()) {
-            this.router.navigate(['/customer/dashboard']);
+            this.router.navigateByUrl('/customer/dashboard');
           }
         } else {
-          console.error('Invalid credentials or unexpected response');
+          this.massage.error('Invalid credentials! Please try again.');
         }
       },
       error: (err) => {
         console.error('Login failed:', err);
+        this.massage.error('Wrong email or password !');
       },
     });
   }
