@@ -8,7 +8,7 @@ import {
 } from '@angular/forms';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Route, Router, RouterModule } from '@angular/router';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { StorageService } from '../../auth-services/storage-service/storage.service';
@@ -30,7 +30,11 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   isSpinning: boolean = false;
 
-  constructor(private service: AuthService, private fb: FormBuilder) {}
+  constructor(
+    private service: AuthService,
+    private fb: FormBuilder,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -38,7 +42,41 @@ export class LoginComponent implements OnInit {
       password: [null, [Validators.required, Validators.minLength(5)]],
     });
   }
+  submitForm(): void {
+    if (this.loginForm.invalid) {
+      console.error('Form invalid');
+      return;
+    }
 
+    this.service.login(this.loginForm.value).subscribe({
+      next: (res) => {
+        console.log('API Response:', res);
+
+        if (res && (res.userId || res.id)) {
+          const user = {
+            id: res.userId ?? res.id,
+            role: res.userRole ?? res.role,
+          };
+
+          StorageService.saveToken(res.jwt ?? res.token);
+          StorageService.saveUser(user);
+
+          if (StorageService.isAdminLoggedIn()) {
+            this.router.navigate(['/admin/dashboard']);
+          } else if (StorageService.isCustomerLoggedIn()) {
+            this.router.navigate(['/customer/dashboard']);
+          }
+        } else {
+          console.error('Invalid credentials or unexpected response');
+        }
+      },
+      error: (err) => {
+        console.error('Login failed:', err);
+      },
+    });
+  }
+
+  /*
   submitForm(): void {
     this.service.login(this.loginForm.value).subscribe((res) => {
       console.log(res);
@@ -50,10 +88,15 @@ export class LoginComponent implements OnInit {
         console.log(user);
         StorageService.saveToken(res.jwt);
         StorageService.saveUser(user);
+        if (StorageService.isAdminLoggedIn()) {
+          this.router.navigateByUrl('admin/dashboard');
+        } else if (StorageService.isCustomerLoggedIn()) {
+          this.router.navigateByUrl('customer/dashboard');
+        }
       } else {
         console.error('Wronge credetials from error');
         console.log('Wronge credetials from log');
       }
     });
-  }
+  }*/
 }

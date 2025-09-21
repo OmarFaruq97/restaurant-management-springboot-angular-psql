@@ -13,6 +13,7 @@ export class StorageService {
     window.localStorage.removeItem(TOKEN);
     window.localStorage.setItem(TOKEN, token);
   }
+
   static saveUser(user: any): void {
     window.localStorage.removeItem(USER);
     window.localStorage.setItem(USER, JSON.stringify(user));
@@ -21,6 +22,7 @@ export class StorageService {
   static getToken(): string | null {
     return localStorage.getItem(TOKEN);
   }
+
   static getUser(): any {
     const userJson = localStorage.getItem(USER);
     if (!userJson) return null; // handle null case safely
@@ -30,13 +32,29 @@ export class StorageService {
   /*
   static getUser(): any {
     return JSON.parse(localStorage.getItem(USER));
-  }*/
-  // Get the user's role
+  }
+  */
+
   static getUserRole(): string {
     const user = this.getUser(); // getUser() returns User | null
     if (user == null) {
       return '';
     }
     return user.role;
+  }
+
+  static isAdminLoggedIn(): boolean {
+    if (this.getToken() === null) {
+      return false;
+    }
+    const role: string = this.getUserRole();
+    return role == 'ADMIN';
+  }
+  static isCustomerLoggedIn(): boolean {
+    if (this.getToken() === null) {
+      return false;
+    }
+    const role: string = this.getUserRole();
+    return role == 'CUSTOMER';
   }
 }
