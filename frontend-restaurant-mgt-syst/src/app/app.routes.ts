@@ -19,9 +19,8 @@ export const routes: Routes = [
       ),
   },
 
-  { path: '', redirectTo: 'login', pathMatch: 'full' }, // better default
-  { path: '**', redirectTo: 'login' }, // fallback to login, not signup
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
+  { path: '**', redirectTo: 'login' },
 ];
-
 
 export const appRouting = provideRouter(routes);
