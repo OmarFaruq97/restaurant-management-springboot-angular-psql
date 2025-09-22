@@ -1,29 +1,21 @@
-/* Center align form */
 .form-center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 91vh;
+    background-color: #b0bfd4;
+    padding: 16px;
+    box-sizing: border-box;
+    padding-top: 20px; /* Even higher position */
 }
 
-/* Alternative color scheme */
-.theme-dark {
-  background: #1f1f1f;
-  border-color: #434343;
-}
-
-.theme-dark nz-form-label {
-  color: #f0f0f0;
-}
-
-.theme-dark input[nz-input] {
-  background: #262626;
-  border-color: #434343;
-  color: #f0f0f0;
-}
-
-/* Success state */
-input[nz-input].ng-valid.ng-touched {
-  border-color: #52c41a;
+.login-form-container {
+    background: #0d6eaf;
+    padding: 24px;
+    border-radius: 8px;
+    
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+    margin-top: 20px; /* Reduced margin to keep it high */
 }
