@@ -7,7 +7,7 @@ import { NzLayoutModule } from 'ng-zorro-antd/layout';
 import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzFormModule } from 'ng-zorro-antd/form';
 import { StorageService } from './auth-services/storage-service/storage.service';
-import { AdminRoutingModule } from "./modules/admin/admin-routing.module";
+import { AdminRoutingModule } from './modules/admin/admin-routing.module';
 
 @Component({
   selector: 'app-root',
@@ -18,32 +18,29 @@ import { AdminRoutingModule } from "./modules/admin/admin-routing.module";
     NzLayoutModule,
     NzButtonModule,
     NzFormModule,
-    AdminRoutingModule
-],
+    AdminRoutingModule,
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   title = 'frontend-restaurant-mgt-syst';
 
-  isAdminLoggedIn : boolean = StorageService.isAdminLoggedIn();
-  isCustomerLoggedIn : boolean = StorageService.isCustomerLoggedIn();
+  isAdminLoggedIn: boolean = StorageService.isAdminLoggedIn();
+  isCustomerLoggedIn: boolean = StorageService.isCustomerLoggedIn();
 
-  constructor (private router : Router){}
+  constructor(private router: Router) {}
 
-  ngOnInit(){
-    this.router.events.subscribe(event =>{
-      if(event.constructor.name ==="NavigationEnd"){
+  ngOnInit() {
+    this.router.events.subscribe((event) => {
+      if (event.constructor.name === 'NavigationEnd') {
         this.isAdminLoggedIn = StorageService.isAdminLoggedIn();
         this.isCustomerLoggedIn = StorageService.isCustomerLoggedIn();
       }
-    })
+    });
   }
-//   logout() {
-//   StorageService.clear(); // clear token & user
-//   this.isAdminLoggedIn = false;
-//   this.isCustomerLoggedIn = false;
-//   this.router.navigateByUrl('/login');
-// }
-
+  logout() {
+    StorageService.signout();
+    this.router.navigateByUrl('/login');
+  }
 }
