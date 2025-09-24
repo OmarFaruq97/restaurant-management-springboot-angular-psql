@@ -1,0 +1,62 @@
+/* Parent container */
+.parent {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Child card/container */
+.child {
+  width: 100%;
+  max-width: 600px; /* Limit width for larger screens */
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* Heading */
+.imgDiv h2 {
+  text-align: center; /* Center heading instead of using margin-left */
+  margin-bottom: 20px;
+}
+
+/* Profile upload section */
+.profile-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.profile-badge .profile {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 2px solid #1890ff;
+}
+
+/* Input spacing */
+nz-form-item {
+  margin-bottom: 15px;
+}
+
+/* Submit button styling */
+.login-form-button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .child {
+    padding: 20px;
+  }
+  
+  .profile-badge .profile {
+    width: 100px;
+    height: 100px;
+  }
+}
