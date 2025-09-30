@@ -7,7 +7,7 @@ import com.org.restaurant_management.dtos.UserDto;
 import com.org.restaurant_management.entities.User;
 import com.org.restaurant_management.repositories.UserRepository;
 import com.org.restaurant_management.services.auth.AuthService;
-import com.org.restaurant_management.services.auth.jwt.UserDetailsServiceImplement;
+import com.org.restaurant_management.services.jwt.UserDetailsServiceImplement;
 import com.org.restaurant_management.util.JwtUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
