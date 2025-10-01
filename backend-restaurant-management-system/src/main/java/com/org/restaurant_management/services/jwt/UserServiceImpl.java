@@ -1,10 +1,25 @@
 package com.org.restaurant_management.services.jwt;
 
+import com.org.restaurant_management.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
 
-public class UserServiceImpl implements  UserService{
+@Service
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService {
+    private UserRepository userRepository;
+
     @Override
     public UserDetailsService userDetailsService() {
-        return null;
+        return new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                return userRepository.findFirstByEmail(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("User Not Found"));
+            }
+        };
     }
 }
