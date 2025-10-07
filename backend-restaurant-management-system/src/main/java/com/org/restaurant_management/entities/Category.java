@@ -23,7 +23,7 @@ public class Category {
     @Column(name = "img", columnDefinition = "bytea")
     private byte[] img;
 
-    public CategoryDto getCategoryDto(){
+    public CategoryDto getCategoryDto() {
         CategoryDto categoryDto = new CategoryDto();
         categoryDto.setId(id);
         categoryDto.setName(name);
